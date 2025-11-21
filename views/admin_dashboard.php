@@ -36,7 +36,7 @@
                 <span class="inline-block w-3 h-3 bg-[#ca8a04] rounded-full mr-1"></span> Pendiente
                 <span class="inline-block w-3 h-3 bg-[#16a34a] rounded-full mr-1 ml-3"></span> Confirmado
             </div>
-            <a href="logout.php" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium transition">Cerrar Sesión</a>
+            <a href="../controllers/auth_logout.php" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium transition">Cerrar Sesión</a>
         </div>
     </header>
 
@@ -104,7 +104,7 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
-                events: 'api_eventos.php', // Carga los eventos del archivo PHP
+                events: 'ApiController.php', // Carga los eventos del archivo PHP
                 eventClick: function(info) {
                     // Alerta simple al hacer click en el calendario
                     Swal.fire({
@@ -135,7 +135,7 @@
                     formData.append('id', idTurno);
                     formData.append('estado', nuevoEstado);
 
-                    const res = await fetch('admin_acciones.php', {
+                    const res = await fetch('AdminController.php', {
                         method: 'POST',
                         body: formData
                     });

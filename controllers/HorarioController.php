@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../models/Turno.php'; // Importar Modelo
+require_once '../models/Turno.php'; 
 
 if(!isset($_SESSION['usuario_id'])){
     http_response_code(403);
@@ -13,18 +13,25 @@ if(!$fecha){
     exit;
 }
 
-// Generar horas totales
-$inicio = new DateTime('09:00');
-$fin = new DateTime('18:00');
-$horas_disponibles = [];
-while($inicio <= $fin){
-    $horas_disponibles[] = $inicio->format('H:i:s');
-    $inicio->modify('+30 minutes');
+try {
+    // Generar horas totales
+    $inicio = new DateTime('09:00');
+    $fin = new DateTime('18:00');
+    $horas_disponibles = [];
+    while($inicio <= $fin){
+        $horas_disponibles[] = $inicio->format('H:i:s');
+        $inicio->modify('+30 minutes');
+    }
+
+    // Consultar ocupadas (Puede fallar si falta la columna 'estado')
+    $ocupadas = Turno::obtenerOcupadas($fecha);
+
+    $libres = array_diff($horas_disponibles, $ocupadas);
+    echo json_encode(array_values($libres));
+
+} catch (Exception $e) {
+    // En caso de error, devolvemos array vacío para no romper el JS
+    error_log("Error en HorarioController: " . $e->getMessage());
+    echo json_encode([]);
 }
-
-// USAR EL MODELO en vez de SQL directo
-$ocupadas = Turno::obtenerOcupadas($fecha); // <--- Asegurate de tener esta función en Turno.php
-
-$libres = array_diff($horas_disponibles, $ocupadas);
-echo json_encode(array_values($libres));
 ?>

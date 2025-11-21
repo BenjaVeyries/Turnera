@@ -1,10 +1,9 @@
 <?php
-// api_eventos.php
 header('Content-Type: application/json');
+require_once '../config/conexion_db.php'; // Usamos la conexión centralizada
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=barberia;charset=utf8", "root", "");
-    
+    global $pdo; // Aseguramos usar la variable del config
     // Traemos solo confirmados y pendientes (ignoramos cancelados para no ensuciar el calendario)
     $sql = "SELECT t.id, t.fecha, t.hora, t.estado, u.nombre 
             FROM turnos t 

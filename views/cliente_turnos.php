@@ -1,16 +1,3 @@
-<?php
-require_once '../auth/require_login.php';
-require_once '../models/Turno.php';
-
-// Pedimos los datos al modelo
-$turnos = Turno::obtenerPorUsuario($_SESSION['usuario_id']);
-$nombre = $_SESSION['nombre'];
-
-// Cargamos la vista limpia
-require '../views/cliente_turnos.php';
-?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,6 +5,7 @@ require '../views/cliente_turnos.php';
     <title>Reservar Turno</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../public/turnos.js" defer></script>
 </head>
 <body class="bg-gray-100">
 
@@ -26,7 +14,7 @@ require '../views/cliente_turnos.php';
     <h1 class="text-xl font-bold">Turnera Barbería</h1>
     <div class="flex items-center gap-4">
         <p class="font-semibold text-gray-600">Hola, <?php echo htmlspecialchars($nombre); ?></p>
-        <a href="logout.php" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cerrar sesión</a>
+        <a href="../controllers/auth_logout.php" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cerrar sesión</a>
     </div>
 </header>
 
@@ -65,119 +53,56 @@ require '../views/cliente_turnos.php';
     <div id="turnos-container">
     <?php if(!empty($turnos)): ?>
         <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b"><th class="py-2">Fecha</th><th class="py-2">Hora</th></tr>
-            </thead>
-            <tbody>
-            <?php foreach($turnos as $t): ?>
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="py-2"><?php echo htmlspecialchars($t['fecha']); ?></td>
-                    <td class="py-2"><?php echo htmlspecialchars($t['hora']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+            <table class="w-full text-left border-collapse">
+    <thead>
+        <tr class="border-b">
+            <th class="py-2">Fecha</th>
+            <th class="py-2">Hora</th>
+            <th class="py-2">Estado</th>
+            <th class="py-2 text-right">Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach($turnos as $t): ?>
+        <tr class="border-b hover:bg-gray-100">
+            <td class="py-2"><?php echo htmlspecialchars($t['fecha']); ?></td>
+            <td class="py-2"><?php echo substr($t['hora'], 0, 5); ?> hs</td>
+            
+            <td class="py-2">
+                <?php 
+                if($t['estado'] == 'confirmado') {
+                    echo '<span class="text-green-600 font-bold">Confirmado</span>';
+                } elseif($t['estado'] == 'cancelado' || $t['estado'] == 'cancelado_cliente') {
+                    echo '<span class="text-red-500 line-through">Cancelado</span>';
+                } else {
+                    echo '<span class="text-yellow-600 font-bold">Pendiente</span>';
+                }
+                ?>
+            </td>
+
+            <td class="py-2 text-right">
+                <?php 
+                // Solo mostrar botón cancelar si NO está cancelado ya
+                // Y opcionalmente: si la fecha es futura (puedes agregar esa lógica si quieres)
+                if($t['estado'] != 'cancelado' && $t['estado'] != 'cancelado_cliente'): 
+                ?>
+                    <button onclick="cancelarTurno(<?php echo $t['id']; ?>)" 
+                            class="bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1 rounded text-sm transition">
+                        Cancelar
+                    </button>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
     <?php else: ?>
         <p class="text-gray-600">No tenés turnos reservados.</p>
     <?php endif; ?>
 </div>
 </div>
 
-<script>
-const btnReserva = document.getElementById('btn-reserva');
-const formTurno = document.getElementById('form-turno');
-const turnosContainer = document.getElementById('turnos-container');
 
-btnReserva.addEventListener('click', ()=>{
-    formTurno.style.display = 'block';
-    formTurno.scrollIntoView({behavior:'smooth'});
-});
-
-const fechaInput = document.getElementById('fecha-input');
-const horaSelect = document.getElementById('hora-select');
-
-fechaInput.addEventListener('change', async ()=>{
-    const fecha = fechaInput.value;
-    if(!fecha) return;
-
-    try {
-        const res = await fetch('horas_disponibles.php?fecha='+fecha);
-        const horas = await res.json();
-
-        horaSelect.innerHTML = '';
-        if(horas.length === 0){
-            horaSelect.innerHTML = '<option value="">No hay horarios disponibles</option>';
-        } else {
-            horaSelect.innerHTML = '<option value="">Seleccionar hora</option>';
-            horas.forEach(h => {
-                const option = document.createElement('option');
-                option.value = h;
-                option.textContent = h;
-                horaSelect.appendChild(option);
-            });
-        }
-    } catch(err){
-        console.error(err);
-        horaSelect.innerHTML = '<option value="">Error cargando horarios</option>';
-    }
-});
-
-document.getElementById('reserva-form').addEventListener('submit', async e => {
-    e.preventDefault();
-
-    const fecha = fechaInput.value;
-    const hora = horaSelect.value;
-
-    if(!fecha || !hora){
-        Swal.fire('Error','Por favor completá todos los campos','error');
-        return;
-    }
-
-    const formData = new FormData(e.target);
-
-    try {
-        const res = await fetch('guardar_turno.php', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-
-        if(data.status === 'ok'){
-            Swal.fire('¡Turno reservado!','Tu turno ha sido registrado correctamente','success');
-
-            const nuevaFila = `
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="py-2">${fecha}</td>
-                    <td class="py-2">${hora}</td>
-                </tr>
-            `;
-            const table = turnosContainer.querySelector('table tbody');
-            if(table){
-                table.insertAdjacentHTML('beforeend', nuevaFila);
-            } else {
-                turnosContainer.innerHTML = `
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b">
-                                <th class="py-2">Fecha</th>
-                                <th class="py-2">Hora</th>
-                            </tr>
-                        </thead>
-                        <tbody>${nuevaFila}</tbody>
-                    </table>
-                `;
-            }
-
-            e.target.reset();
-            horaSelect.innerHTML = '<option value="">Seleccionar fecha primero</option>';
-        } else {
-            Swal.fire('Error', data.message, 'error');
-        }
-    } catch(err) {
-        Swal.fire('Error','Ocurrió un problema. Intenta nuevamente','error');
-    }
-});
-</script>
 
 </body>
 </html>

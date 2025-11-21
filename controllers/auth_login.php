@@ -22,7 +22,8 @@ if ($usuario && password_verify($password, $usuario['password_hash'])) {
     if ($usuario['rol'] === 'Administrador') {
         header("Location: AdminDashboard.php"); // Va al controlador
     } else {
-        header("Location: ../views/cliente_turnos.php");
+       // Redirigimos al CONTROLADOR, que se encarga de buscar los datos y cargar la vista
+        header("Location: ClienteController.php");
     }
     exit;
 } else {
