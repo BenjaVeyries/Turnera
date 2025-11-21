@@ -57,7 +57,8 @@ const reservaForm = document.getElementById('reserva-form');
 if(reservaForm){
     reservaForm.addEventListener('submit', async e => {
         e.preventDefault();
-
+        
+        
         const fecha = fechaInput.value;
         const hora = horaSelect.value;
 
@@ -67,6 +68,7 @@ if(reservaForm){
         }
 
         const formData = new FormData(e.target);
+        formData.append('csrf_token', CSRF_TOKEN);
 
         try {
             // CORRECCIÓN DE RUTA: Apunta a controllers
@@ -122,6 +124,7 @@ async function cancelarTurno(id) {
         try {
             const formData = new FormData();
             formData.append('id', id);
+            formData.append('csrf_token', CSRF_TOKEN);
 
             const res = await fetch('../controllers/TurnoCancelar.php', {
                 method: 'POST',

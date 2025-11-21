@@ -5,6 +5,10 @@
     <title>Reservar Turno</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    // Pasamos el token de sesión a una variable JS global
+    const CSRF_TOKEN = "<?php echo $_SESSION['csrf_token'] ?? ''; ?>";
+    </script>
     <script src="../public/turnos.js" defer></script>
 </head>
 <body class="bg-gray-100">

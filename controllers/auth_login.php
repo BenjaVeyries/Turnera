@@ -1,4 +1,8 @@
 <?php
+// Configuración de seguridad de Cookies 
+ini_set('session.cookie_httponly', 1); // JS no puede leer la cookie
+ini_set('session.use_only_cookies', 1); // Forzar uso de cookies
+
 session_start();
 require_once '../models/Usuario.php'; // Importamos Modelo
 
@@ -17,6 +21,11 @@ if ($usuario && password_verify($password, $usuario['password_hash'])) {
     $_SESSION['email'] = $usuario['email'];
     $_SESSION['nombre'] = $usuario['nombre'];
     $_SESSION['rol'] = $usuario['rol'];
+
+    // GENERAR TOKEN CSRF
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 
     // Redirecciones correctas
     if ($usuario['rol'] === 'Administrador') {

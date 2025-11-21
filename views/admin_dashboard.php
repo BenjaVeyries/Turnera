@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script>
+    const CSRF_TOKEN = "<?php echo $_SESSION['csrf_token'] ?? ''; ?>";
+    </script>
     
     <style>
         /* Personalización pequeña para la barra de scroll */
@@ -134,6 +137,7 @@
                     const formData = new FormData();
                     formData.append('id', idTurno);
                     formData.append('estado', nuevoEstado);
+                    formData.append('csrf_token', CSRF_TOKEN);
 
                     const res = await fetch('AdminController.php', {
                         method: 'POST',

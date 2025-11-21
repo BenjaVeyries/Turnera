@@ -2,6 +2,12 @@
 require_once '../auth/require_login.php';
 require_once '../models/Turno.php'; // Importamos el Modelo
 
+
+if ($_SESSION['rol'] !== 'Administrador') {
+    // Si es cliente y quiere entrar acá, lo mandamos a su panel
+    header("Location: ClienteController.php");
+    exit;
+}
 // Usamos el modelo para pedir los datos
 $turnos = Turno::obtenerTodos();
 

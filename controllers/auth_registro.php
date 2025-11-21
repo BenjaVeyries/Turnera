@@ -1,4 +1,9 @@
 <?php
+
+// Configuración de seguridad de Cookies 
+ini_set('session.cookie_httponly', 1); // JS no puede leer la cookie
+ini_set('session.use_only_cookies', 1); // Forzar uso de cookies
+
 session_start();
 require_once '../models/Usuario.php'; // Usar Modelo
 
@@ -22,6 +27,8 @@ if ($usuario_id) {
     $_SESSION['email'] = $email;
     $_SESSION['nombre'] = $nombre;
     $_SESSION['rol'] = 'Cliente'; 
+    
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     
     // IMPORTANTE: Redirigir al CONTROLADOR de cliente, no a la vista directa
     header("Location: ClienteController.php"); 
