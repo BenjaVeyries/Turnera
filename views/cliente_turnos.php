@@ -1,15 +1,16 @@
 <?php
-session_start();
+require_once '../auth/require_login.php';
+require_once '../models/Turno.php';
 
-// Si NO está logueado → al login
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.html");
-    exit;
-}
-
-// Tomamos el nombre del usuario desde la sesión
+// Pedimos los datos al modelo
+$turnos = Turno::obtenerPorUsuario($_SESSION['usuario_id']);
 $nombre = $_SESSION['nombre'];
+
+// Cargamos la vista limpia
+require '../views/cliente_turnos.php';
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -62,34 +63,24 @@ $nombre = $_SESSION['nombre'];
 <div id="lista-turnos" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow">
     <h2 class="text-2xl font-bold mb-6">Mis Turnos</h2>
     <div id="turnos-container">
-        <?php
-        // Mostrar turnos del usuario
-        try {
-            $pdo = new PDO("mysql:host=localhost;dbname=barberia;charset=utf8","root","");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            
-            $stmt = $pdo->prepare("SELECT fecha,hora FROM turnos WHERE usuario_id=? ORDER BY fecha,hora");
-            $stmt->execute([$_SESSION['usuario_id']]);
-            $turnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if($turnos){
-                echo '<table class="w-full text-left border-collapse">';
-                echo '<thead><tr class="border-b"><th class="py-2">Fecha</th><th class="py-2">Hora</th></tr></thead><tbody>';
-                foreach($turnos as $t){
-                    echo '<tr class="border-b hover:bg-gray-100">';
-                    echo '<td class="py-2">'.htmlspecialchars($t['fecha']).'</td>';
-                    echo '<td class="py-2">'.htmlspecialchars($t['hora']).'</td>';
-                    echo '</tr>';
-                }
-                echo '</tbody></table>';
-            } else {
-                echo '<p class="text-gray-600">No tenés turnos reservados.</p>';
-            }
-        } catch(PDOException $e){
-            echo '<p class="text-red-600">Error al cargar turnos.</p>';
-        }
-        ?>
-    </div>
+    <?php if(!empty($turnos)): ?>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b"><th class="py-2">Fecha</th><th class="py-2">Hora</th></tr>
+            </thead>
+            <tbody>
+            <?php foreach($turnos as $t): ?>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="py-2"><?php echo htmlspecialchars($t['fecha']); ?></td>
+                    <td class="py-2"><?php echo htmlspecialchars($t['hora']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p class="text-gray-600">No tenés turnos reservados.</p>
+    <?php endif; ?>
+</div>
 </div>
 
 <script>
