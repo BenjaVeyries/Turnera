@@ -43,5 +43,13 @@ function logout() {
 }
 
 
+//header
+const carousel = document.getElementById("carousel");
+    let index = 0;
 
+    function nextSlide() {
+        index = (index + 1) % 3; // cantidad de imágenes
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+    }
 
+    setInterval(nextSlide, 4000); // Cambia cada 4 segundos

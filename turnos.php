@@ -20,7 +20,7 @@ $nombre = $_SESSION['nombre'];
 </head>
 <body class="bg-gray-100">
 
-<!-- HEADER -->
+
 <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-xl font-bold">Turnera Barbería</h1>
     <div class="flex items-center gap-4">

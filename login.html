@@ -9,6 +9,26 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
 
+    <header class="fixed top-0 left-0 w-full bg-white shadow-lg z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center py-4 px-6">
+        <h1 class="text-2xl font-bold">Barbería</h1>
+
+    <nav class="flex items-center space-x-4">
+        <a href="index.html" class="text-gray-700 hover:text-blue-600">Inicio</a>
+        <button onclick="scrollToSection('servicios')" class="text-gray-700 hover:text-blue-600">Servicios</button>
+        <button onclick="scrollToSection('galeria')" class="text-gray-700 hover:text-blue-600">Galería</button>
+        <button onclick="scrollToSection('contacto')" class="text-gray-700 hover:text-blue-600">Contacto</button>
+
+        <button id="btnReservar" onclick="irReservar()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            Reservar turno
+        </button>
+
+        <a id="btnLogin" href="login.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Iniciar sesión</a>
+        <button id="btnLogout" onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition hidden">Cerrar sesión</button>
+    </nav>
+    </div>
+</header>
+
     <div class="bg-white shadow-xl rounded-xl p-8 w-96">
         <h2 class="text-2xl font-bold text-center mb-6">Iniciar sesión</h2>
 
@@ -23,7 +43,7 @@
     </form>
 
             <p class="text-center mt-6 text-sm">
-                ¿No tenés cuenta? <a href="registrar.html" class="text-blue-600 hover:underline">Crear una</a>
+                ¿No tenés cuenta? <a href="registrar.html" class="text-blue-600 hover:underline">Registrate</a>
             </p>
     </div>
 

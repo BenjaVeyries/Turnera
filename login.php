@@ -17,7 +17,7 @@ if (empty($email) || empty($password)) {
 }
 
 // Buscar usuario por email
-$stmt = $pdo->prepare("SELECT id, nombre, email, password_hash FROM usuarios WHERE email = ?");
+$stmt = $pdo->prepare("SELECT id, nombre, rol, email, password_hash FROM usuarios WHERE email = ?");
 $stmt->execute([$email]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,9 +26,17 @@ if ($usuario && password_verify($password, $usuario['password_hash'])) {
     $_SESSION['usuario_id'] = $usuario['id'];
     $_SESSION['email'] = $usuario['email'];
     $_SESSION['nombre'] = $usuario['nombre']; // <-- Guardamos el nombre
+    $_SESSION['rol'] = $usuario['rol'];
+
+
+    if ($usuario['rol'] === 'Administrador') {
+        header("Location: panelAdmin.html");
+    } else {
+        // Redirigir a la página de turnos
+        header("Location: turnos.php");
+    }
     
-    // Redirigir a la página de turnos
-    header("Location: turnos.php");
+    
     exit;
 } else {
     echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
