@@ -1,12 +1,10 @@
 <?php
 require_once '../auth/require_login.php';
-require_once '../config/db.php';
+require_once '../models/Turno.php'; // Importamos el Modelo
 
-// Lógica: Consultar turnos
-$sql = "SELECT ... FROM turnos ...";
-$stmt = $pdo->query($sql);
-$turnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Usamos el modelo para pedir los datos
+$turnos = Turno::obtenerTodos();
 
-// Cargar la vista
+// Cargamos la vista
 require '../views/admin_dashboard.php'; 
 ?>
