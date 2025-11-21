@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar sesión</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="bg-white shadow-xl rounded-xl p-8 w-96">
+        <h2 class="text-2xl font-bold text-center mb-6">Iniciar sesión</h2>
+
+    <form action="login.php" method="POST">
+        <label class="block mb-2 font-semibold">Email</label>
+        <input type="email" name="email" required class="w-full p-2 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-500">
+
+        <label class="block mb-2 font-semibold">Contraseña</label>
+        <input type="password" name="password" required class="w-full p-2 border rounded-lg mb-6 focus:ring-2 focus:ring-blue-500">
+
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Ingresar</button>
+    </form>
+
+            <p class="text-center mt-6 text-sm">
+                ¿No tenés cuenta? <a href="registrar.html" class="text-blue-600 hover:underline">Crear una</a>
+            </p>
+    </div>
+
+</body>
+</html>
+
+

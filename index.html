@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Barbería • Inicio</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js" defer></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- HEADER -->
+<header class="fixed top-0 left-0 w-full bg-white shadow-lg z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center py-4 px-6">
+        <h1 class="text-2xl font-bold">Barbería</h1>
+
+    <nav class="flex items-center space-x-4">
+        <button onclick="scrollToSection('hero')" class="text-gray-700 hover:text-blue-600">Inicio</button>
+        <button onclick="scrollToSection('servicios')" class="text-gray-700 hover:text-blue-600">Servicios</button>
+        <button onclick="scrollToSection('galeria')" class="text-gray-700 hover:text-blue-600">Galería</button>
+        <button onclick="scrollToSection('contacto')" class="text-gray-700 hover:text-blue-600">Contacto</button>
+
+        <button id="btnReservar" onclick="irReservar()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            Reservar turno
+        </button>
+
+        <a id="btnLogin" href="login.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Iniciar sesión</a>
+        <button id="btnLogout" onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition hidden">Cerrar sesión</button>
+    </nav>
+    </div>
+</header>
+
+<!-- HERO -->
+    <section id="hero" class="h-screen flex items-center justify-center bg-cover bg-center mt-16"
+            style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80');">
+        <div class="bg-black bg-opacity-60 p-8 rounded-xl text-center text-white">
+            <h2 class="text-4xl font-bold mb-4">Cortes modernos & estilo profesional</h2>
+            <p class="text-lg mb-6">La mejor experiencia para tu look en un solo lugar.</p>
+        </div>
+    </section>
+
+<!-- SERVICIOS -->
+    <section id="servicios" class="py-20 bg-gray-100">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-10">Servicios</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 shadow-lg rounded-xl">
+                <h3 class="text-xl font-semibold mb-2">Corte clásico</h3>
+                <p class="text-gray-600">Estilo tradicional con terminación perfecta.</p>
+            </div>
+            
+            <div class="bg-white p-6 shadow-lg rounded-xl">
+                <h3 class="text-xl font-semibold mb-2">Corte moderno</h3>
+                <p class="text-gray-600">Fade, texturizados y estilos actuales.</p>
+            </div>
+            
+            <div class="bg-white p-6 shadow-lg rounded-xl">
+                <h3 class="text-xl font-semibold mb-2">Arreglo de barba</h3>
+                <p class="text-gray-600">Perfilado y cuidado profesional.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+<!-- GALERÍA -->
+    <section id="galeria" class="py-20">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-10">Galería</h2>
+        
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <img class="rounded-lg shadow" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70" alt="">
+            <img class="rounded-lg shadow" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9" alt="">
+            <img class="rounded-lg shadow" src="https://images.unsplash.com/photo-1621605815971-3306c97e5e66" alt="">
+        
+        </div>
+        </div>
+    </section>
+
+<!-- CONTACTO -->
+    <section id="contacto" class="py-20 bg-gray-100">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-10">Contacto</h2>
+            <p class="text-gray-700 mb-4">Dirección: Calle Falsa 123</p>
+            <p class="text-gray-700 mb-4">Teléfono: 11 2345 6789</p>
+            <p class="text-gray-700">Email: contacto@barberia.com</p>
+        </div>
+    </section>
+
+<!-- FOOTER -->
+    <footer class="bg-black text-white py-6 text-center">
+        <p>&copy; 2025 Barbería. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
