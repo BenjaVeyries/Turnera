@@ -1,6 +1,14 @@
 <?php
 // admin_acciones.php
 session_start();
+
+// 1. Seguridad
+if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'Administrador') {
+    header("Location: login.html");
+    exit;
+}
+
+
 header('Content-Type: application/json');
 
 // Seguridad básica: Verificar si está logueado

@@ -1,30 +1,4 @@
-<?php
-session_start();
 
-// 1. Seguridad
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.html");
-    exit;
-}
-
-// 2. Obtener datos para la lista (Tabla)
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=barberia;charset=utf8", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Traemos todos los turnos ordenados
-    $sql = "SELECT t.id, t.fecha, t.hora, t.estado, u.nombre 
-            FROM turnos t 
-            JOIN usuarios u ON t.usuario_id = u.id 
-            ORDER BY t.fecha DESC, t.hora ASC";
-    
-    $stmt = $pdo->query($sql);
-    $turnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

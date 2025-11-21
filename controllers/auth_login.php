@@ -30,7 +30,7 @@ if ($usuario && password_verify($password, $usuario['password_hash'])) {
 
 
     if ($usuario['rol'] === 'Administrador') {
-        header("Location: panelAdmin.html");
+        header("Location: panelAdmin.php");
     } else {
         // Redirigir a la página de turnos
         header("Location: turnos.php");
