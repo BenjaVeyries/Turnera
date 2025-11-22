@@ -35,6 +35,9 @@
             💈 Dashboard Admin
         </h1>
         <div class="flex items-center gap-4">
+            <p class="font-semibold text-gray-300 mr-4">Hola, <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Admin'); ?> (Admin)</p>
+        </div>
+        <div class="flex items-center gap-4">
             <div class="text-sm text-gray-400 hidden md:block">
                 <span class="inline-block w-3 h-3 bg-[#ca8a04] rounded-full mr-1"></span> Pendiente
                 <span class="inline-block w-3 h-3 bg-[#16a34a] rounded-full mr-1 ml-3"></span> Confirmado

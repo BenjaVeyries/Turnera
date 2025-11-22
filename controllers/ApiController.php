@@ -1,6 +1,18 @@
 <?php
+
+// 1. Configuración de Cookies (Igual que en los otros)
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+
+session_start();
+
 header('Content-Type: application/json');
 require_once '../config/conexion_db.php'; // Usamos la conexión centralizada
+
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'Administrador') {
+    echo json_encode([]); 
+    exit;
+}
 
 try {
     global $pdo; // Aseguramos usar la variable del config

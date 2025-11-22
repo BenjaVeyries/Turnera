@@ -57,7 +57,7 @@
     <div id="turnos-container">
     <?php if(!empty($turnos)): ?>
         <table class="w-full text-left border-collapse">
-            <table class="w-full text-left border-collapse">
+            
     <thead>
         <tr class="border-b">
             <th class="py-2">Fecha</th>
