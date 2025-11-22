@@ -23,19 +23,22 @@ class Turno {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // 3. Crear un turno nuevo
-    public static function crear($usuario_id, $fecha, $hora) {
+    
+    // 3. Crear un turno nuevo 
+    public static function crear($usuario_id, $fecha, $hora, $servicio_id, $peluquero_id) {
         global $pdo;
         
-        // Verificar duplicados
-        $stmt = $pdo->prepare("SELECT id FROM turnos WHERE fecha=? AND hora=? AND estado != 'cancelado'");
-        $stmt->execute([$fecha, $hora]);
+        // Verificar duplicados (mismo peluquero, mismo día y hora)
+        $stmt = $pdo->prepare("SELECT id FROM turnos WHERE fecha=? AND hora=? AND peluquero_id=? AND estado != 'cancelado' AND estado != 'cancelado_cliente'");
+        $stmt->execute([$fecha, $hora, $peluquero_id]);
+        
         if($stmt->fetch()) {
             return false; // Ya existe
         }
 
-        $stmt = $pdo->prepare("INSERT INTO turnos(usuario_id, fecha, hora, estado) VALUES(?,?,?, 'pendiente')");
-        return $stmt->execute([$usuario_id, $fecha, $hora]);
+        // Insertar con los nuevos campos
+        $stmt = $pdo->prepare("INSERT INTO turnos(usuario_id, fecha, hora, servicio_id, peluquero_id, estado) VALUES(?,?,?,?,?, 'pendiente')");
+        return $stmt->execute([$usuario_id, $fecha, $hora, $servicio_id, $peluquero_id]);
     }
 
     // 4. Cambiar estado (Aceptar/Cancelar)
@@ -60,6 +63,20 @@ class Turno {
         $stmt = $pdo->prepare("UPDATE turnos SET estado = 'cancelado_cliente' WHERE id = ? AND usuario_id = ? AND estado != 'cancelado_cliente'");
         $stmt->execute([$idTurno, $idUsuario]);
         return $stmt->rowCount() > 0; // Devuelve true si se modificó algo
+    }
+
+    // 7. Obtener turnos asignados a un peluquero específico
+    public static function obtenerPorPeluquero($peluquero_id) {
+        global $pdo;
+        $sql = "SELECT t.id, t.fecha, t.hora, t.estado, u.nombre as nombre_cliente, s.nombre as servicio
+                FROM turnos t 
+                JOIN usuarios u ON t.usuario_id = u.id 
+                LEFT JOIN servicios s ON t.servicio_id = s.id
+                WHERE t.peluquero_id = ? 
+                ORDER BY t.fecha DESC, t.hora ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$peluquero_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

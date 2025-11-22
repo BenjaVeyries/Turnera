@@ -1,18 +1,21 @@
 <?php
+// controllers/AdminDashboard.php
 require_once '../auth/require_login.php';
-require_once '../models/Turno.php'; // Importamos el Modelo
-require_once '../models/Notificacion.php';
+require_once '../models/Turno.php';
+require_once '../models/Notificacion.php'; // <--- [IMPORTANTE] Faltaba esto
 
-$notificaciones = Notificacion::obtenerNoLeidas($_SESSION['usuario_id']);
-
+// Seguridad: Solo Admin
 if ($_SESSION['rol'] !== 'Administrador') {
-    // Si es cliente y quiere entrar acá, lo mandamos a su panel
     header("Location: ClienteController.php");
     exit;
 }
-// Usamos el modelo para pedir los datos
+
+// 1. Cargar Turnos
 $turnos = Turno::obtenerTodos();
 
-// Cargamos la vista
+// 2. Cargar Notificaciones (Esto es lo que te faltaba)
+$notificaciones = Notificacion::obtenerNoLeidas($_SESSION['usuario_id']);
+
+// 3. Cargar Vista
 require '../views/admin_dashboard.php'; 
 ?>

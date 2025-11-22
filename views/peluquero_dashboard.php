@@ -1,85 +1,57 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Control - Barbería</title>
+    <title>Panel del Profesional - Barbería</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
     <script>
     const CSRF_TOKEN = "<?php echo $_SESSION['csrf_token'] ?? ''; ?>";
     </script>
-    
     <style>
-        /* Personalización pequeña para la barra de scroll */
-        .scroll-personalizado::-webkit-scrollbar {
-            width: 8px;
-        }
-        .scroll-personalizado::-webkit-scrollbar-track {
-            background: #1f2937; 
-        }
-        .scroll-personalizado::-webkit-scrollbar-thumb {
-            background: #4b5563; 
-            border-radius: 4px;
-        }
-        .scroll-personalizado::-webkit-scrollbar-thumb:hover {
-            background: #6b7280; 
-        }
+        .scroll-personalizado::-webkit-scrollbar { width: 8px; }
+        .scroll-personalizado::-webkit-scrollbar-track { background: #1f2937; }
+        .scroll-personalizado::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .scroll-personalizado::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden">
 
     <header class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center shrink-0 z-10 shadow-md">
         <h1 class="text-2xl font-bold flex items-center gap-2">
-            💈 Dashboard Admin
+            ✂️ Panel del Profesional
         </h1>
+        
         <div class="flex items-center gap-4">
-            <p class="font-semibold text-gray-300 mr-4">Hola, <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Admin'); ?> (Admin)</p>
-        </div>
-
-        <div class="flex items-center gap-4">
-            <a href="../views/admin_servicios.php" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium transition flex items-center gap-2">
-                ⚙️ Servicios
-            </a>
-
-            <a href="../views/admin_crear_peluquero.php" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded text-sm font-medium transition flex items-center gap-2">
-                ✂️ Nuevo Profesional
-            </a>
-        </div>
-
-        <div class="relative group mr-4">
-    <button class="text-gray-300 hover:text-white focus:outline-none">
-        🔔
-        <?php if(count($notificaciones) > 0): ?>
-            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                <?php echo count($notificaciones); ?>
-            </span>
-        <?php endif; ?>
-    </button>
-
-    <div class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
-        <div class="py-2">
-            <?php if(count($notificaciones) > 0): ?>
-                <?php foreach($notificaciones as $noti): ?>
-                    <div class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
-                        <p class="text-sm text-gray-600"><?php echo htmlspecialchars($noti['mensaje']); ?></p>
-                        <p class="text-xs text-gray-400 mt-1"><?php echo $noti['creado_en']; ?></p>
+            <p class="font-semibold text-gray-300">Hola, <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Profesional'); ?></p>
+            
+            <div class="relative group">
+                <button class="text-gray-300 hover:text-white focus:outline-none">
+                    🔔
+                    <?php if(isset($notificaciones) && count($notificaciones) > 0): ?>
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                            <?php echo count($notificaciones); ?>
+                        </span>
+                    <?php endif; ?>
+                </button>
+                <div class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
+                    <div class="py-2 text-gray-800">
+                        <?php if(isset($notificaciones) && count($notificaciones) > 0): ?>
+                            <?php foreach($notificaciones as $noti): ?>
+                                <div class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
+                                    <p class="text-sm"><?php echo htmlspecialchars($noti['mensaje']); ?></p>
+                                    <p class="text-xs text-gray-400 mt-1"><?php echo $noti['creado_en']; ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                            <a href="../controllers/marcar_leido.php" class="block text-center text-sm text-blue-500 py-2 hover:bg-gray-100">Marcar leídas</a>
+                        <?php else: ?>
+                            <p class="px-4 py-3 text-sm text-gray-500 text-center">Sin novedades.</p>
+                        <?php endif; ?>
                     </div>
-                <?php endforeach; ?>
-                <a href="../controllers/marcar_leido.php" class="block text-center text-sm text-blue-500 py-2 hover:bg-gray-100">Marcar como leídas</a>
-            <?php else: ?>
-                <p class="px-4 py-3 text-sm text-gray-500 text-center">No tienes notificaciones nuevas.</p>
-            <?php endif; ?>
-        </div>
-        </div>
-    </div>
-
-        <div class="flex items-center gap-4">
-            <div class="text-sm text-gray-400 hidden md:block">
-                <span class="inline-block w-3 h-3 bg-[#ca8a04] rounded-full mr-1"></span> Pendiente
-                <span class="inline-block w-3 h-3 bg-[#16a34a] rounded-full mr-1 ml-3"></span> Confirmado
+                </div>
             </div>
+
             <a href="../controllers/auth_logout.php" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium transition">Cerrar Sesión</a>
         </div>
     </header>
@@ -89,18 +61,20 @@
             
             <div class="bg-gray-800 rounded-xl shadow-xl border border-gray-700 flex flex-col h-full col-span-1">
                 <div class="p-4 border-b border-gray-700 bg-gray-800 rounded-t-xl">
-                    <h2 class="font-bold text-lg text-gray-200">📋 Solicitudes Recientes</h2>
+                    <h2 class="font-bold text-lg text-gray-200">📅 Mis Turnos Asignados</h2>
                 </div>
                 
                 <div class="overflow-y-auto flex-1 p-2 scroll-personalizado">
-                    <?php if(count($turnos) > 0): ?>
+                    <?php if(isset($turnos) && count($turnos) > 0): ?>
                         <div class="space-y-3">
                             <?php foreach ($turnos as $t): ?>
                                 <div class="bg-gray-700 p-3 rounded-lg border-l-4 <?php echo ($t['estado']=='confirmado'?'border-green-500':($t['estado']=='cancelado'?'border-red-500':'border-yellow-500')); ?> hover:bg-gray-600 transition">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <p class="font-bold text-white"><?php echo htmlspecialchars($t['nombre']); ?></p>
-                                            <p class="text-sm text-gray-300">
+                                            <p class="font-bold text-white"><?php echo htmlspecialchars($t['nombre_cliente']); ?></p>
+                                            <p class="text-sm text-blue-300 font-medium"><?php echo htmlspecialchars($t['servicio'] ?? 'Corte'); ?></p>
+                                            
+                                            <p class="text-sm text-gray-300 mt-1">
                                                 📅 <?php echo date("d/m", strtotime($t['fecha'])); ?> 
                                                 ⏰ <?php echo substr($t['hora'], 0, 5); ?>
                                             </p>
@@ -123,7 +97,7 @@
                             <?php endforeach; ?>
                         </div>
                     <?php else: ?>
-                        <p class="text-gray-400 text-center mt-10">No hay turnos registrados.</p>
+                        <p class="text-gray-400 text-center mt-10">No tenés turnos asignados.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -136,21 +110,20 @@
     </div>
 
     <script>
-        // 1. Configuración del Calendario
+        // Reutilizamos la misma lógica de JS
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
-                height: '100%', // Importante para que se ajuste al contenedor
+                height: '100%', 
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
-                events: 'ApiController.php', // Carga los eventos del archivo PHP
+                events: 'ApiController.php', // Asegurate de modificar ApiController para permitir Peluqueros
                 eventClick: function(info) {
-                    // Alerta simple al hacer click en el calendario
                     Swal.fire({
                         title: info.event.title,
                         text: 'Fecha: ' + info.event.start.toLocaleString(),
@@ -161,15 +134,13 @@
             calendar.render();
         });
 
-        // 2. Función para cambiar estado (Misma lógica que antes)
         async function cambiarEstado(idTurno, nuevoEstado) {
+            // ... Misma función JS que en admin_dashboard ...
             const result = await Swal.fire({
                 title: '¿Actualizar turno?',
                 text: `Marcar como: ${nuevoEstado}`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí'
             });
 
@@ -180,24 +151,17 @@
                     formData.append('estado', nuevoEstado);
                     formData.append('csrf_token', CSRF_TOKEN);
 
-                    const res = await fetch('AdminController.php', {
-                        method: 'POST',
-                        body: formData
+                    // IMPORTANTE: AdminController debe permitir rol 'Peluquero'
+                    const res = await fetch('AdminController.php', { 
+                        method: 'POST', body: formData 
                     });
                     const data = await res.json();
 
-                    if(data.status === 'ok') {
-                        // Recargamos la página para ver los cambios en Lista y Calendario a la vez
-                        location.reload();
-                    } else {
-                        Swal.fire('Error', 'No se pudo actualizar', 'error');
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
+                    if(data.status === 'ok') { location.reload(); } 
+                    else { Swal.fire('Error', 'No se pudo actualizar', 'error'); }
+                } catch (error) { console.error(error); }
             }
         }
     </script>
-
 </body>
 </html>

@@ -1,43 +1,75 @@
 <?php
+// controllers/HorarioController.php
 
 // Configuración de seguridad de Cookies 
+
 ini_set('session.cookie_httponly', 1); // JS no puede leer la cookie
 ini_set('session.use_only_cookies', 1); // Forzar uso de cookies
 
-
 session_start();
-require_once '../models/Turno.php'; 
+header('Content-Type: application/json');
+require_once '../config/conexion_db.php';
+require_once '../models/Peluquero.php'; // Necesitamos el modelo Peluquero
 
+// Validar sesión
 if(!isset($_SESSION['usuario_id'])){
     http_response_code(403);
+    echo json_encode(['error' => 'No autorizado']);
     exit;
 }
 
 $fecha = $_GET['fecha'] ?? '';
-if(!$fecha){
-    echo json_encode([]);
+$peluquero_id = $_GET['peluquero_id'] ?? '';
+
+if(!$fecha || !$peluquero_id){
+    echo json_encode([]); // Si faltan datos, no mostramos nada
     exit;
 }
 
 try {
-    // Generar horas totales
-    $inicio = new DateTime('09:00');
-    $fin = new DateTime('18:00');
-    $horas_disponibles = [];
-    while($inicio <= $fin){
-        $horas_disponibles[] = $inicio->format('H:i:s');
-        $inicio->modify('+30 minutes');
+    // 1. Descubrir qué día de la semana es (Traducción Inglés -> Español)
+    $diasIngles = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    $diasEspanol = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
+    $diaSemanaIngles = date('l', strtotime($fecha)); 
+    $diaSemana = str_replace($diasIngles, $diasEspanol, $diaSemanaIngles);
+
+    // 2. Buscar el Rango Horario de ESTE peluquero para ESE día
+    // Usamos la función que agregaste en el Paso 3
+    $rangos = Peluquero::obtenerHorarios($peluquero_id, $diaSemana);
+
+    $horasPosibles = [];
+
+    if (empty($rangos)) {
+        // Si no tiene horario configurado ese día, devolvemos vacío (No trabaja)
+        echo json_encode([]); 
+        exit;
     }
 
-    // Consultar ocupadas (Puede fallar si falta la columna 'estado')
-    $ocupadas = Turno::obtenerOcupadas($fecha);
+    // 3. Generar los intervalos permitidos (Ej: de 17:00 a 20:00)
+    foreach ($rangos as $rango) {
+        $inicio = new DateTime($rango['hora_inicio']);
+        $fin = new DateTime($rango['hora_fin']);
+        
+        // Generamos turnos cada 30 min hasta llegar al horario de salida
+        while ($inicio < $fin) { 
+            $horasPosibles[] = $inicio->format('H:i:s');
+            $inicio->modify('+30 minutes'); 
+        }
+    }
 
-    $libres = array_diff($horas_disponibles, $ocupadas);
-    echo json_encode(array_values($libres));
+    // 4. Buscar qué turnos YA tiene ocupados ese peluquero ese día
+    // NOTA: Aquí filtramos por peluquero_id para que no choquen con otros
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT hora FROM turnos WHERE fecha = ? AND peluquero_id = ? AND estado != 'cancelado' AND estado != 'cancelado_cliente'");
+    $stmt->execute([$fecha, $peluquero_id]);
+    $ocupadas = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // 5. Restar (Disponibles - Ocupadas)
+    $finales = array_diff($horasPosibles, $ocupadas);
+
+    echo json_encode(array_values($finales));
 
 } catch (Exception $e) {
-    // En caso de error, devolvemos array vacío para no romper el JS
-    error_log("Error en HorarioController: " . $e->getMessage());
     echo json_encode([]);
 }
 ?>

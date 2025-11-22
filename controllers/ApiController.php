@@ -9,7 +9,7 @@ session_start();
 header('Content-Type: application/json');
 require_once '../config/conexion_db.php'; // Usamos la conexión centralizada
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Peluquero')) {
     echo json_encode([]); 
     exit;
 }

@@ -13,7 +13,7 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
     exit;
 }
 // Verificar Admin
-if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['usuario_id']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Peluquero')) {
     echo json_encode(['status' => 'error', 'message' => 'No autorizado']);
     exit;
 }

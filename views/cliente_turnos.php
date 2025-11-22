@@ -58,25 +58,65 @@
 </div>
 
 <!-- FORMULARIO DE RESERVA -->
-<div id="form-turno" class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow mb-10" style="display: none;">
-    <h2 class="text-2xl font-bold mb-6">Formulario de Turno</h2>
-    <form id="reserva-form">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div id="wizard-reserva" class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow mb-10" style="display: none;">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">💈 Nueva Reserva</h2>
+
+    <div class="flex justify-between mb-8 text-sm font-medium text-gray-500">
+        <span id="progreso-1" class="text-blue-600 font-bold">1. Servicio</span>
+        <span id="progreso-2">2. Profesional</span>
+        <span id="progreso-3">3. Fecha y Hora</span>
+        <span id="progreso-4">4. Confirmar</span>
+    </div>
+
+    <div id="step-1" class="step-content">
+        <h3 class="text-xl font-semibold mb-4">¿Qué te querés hacer?</h3>
+        <div id="lista-servicios" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p class="text-gray-500">Cargando servicios...</p>
+        </div>
+    </div>
+
+    <div id="step-2" class="step-content hidden">
+        <h3 class="text-xl font-semibold mb-4">Elegí tu profesional</h3>
+        <button onclick="volverPaso(1)" class="mb-4 text-sm text-blue-500 hover:underline">← Volver a servicios</button>
+        <div id="lista-peluqueros" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            </div>
+    </div>
+
+    <div id="step-3" class="step-content hidden">
+        <h3 class="text-xl font-semibold mb-4">Elegí turno</h3>
+        <button onclick="volverPaso(2)" class="mb-4 text-sm text-blue-500 hover:underline">← Volver a profesionales</button>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label class="block mb-2 font-semibold">Fecha</label>
-                <input type="date" name="fecha" id="fecha-input" required class="w-full p-2 border rounded-lg">
+                <label class="block font-bold mb-2">Fecha</label>
+                <input type="date" id="wizard-fecha" class="w-full border p-2 rounded" min="<?php echo date('Y-m-d'); ?>">
             </div>
             <div>
-                <label class="block mb-2 font-semibold">Hora</label>
-                <select name="hora" id="hora-select" required class="w-full p-2 border rounded-lg">
-                    <option value="">Seleccionar fecha primero</option>
-                </select>
+                <label class="block font-bold mb-2">Horarios Disponibles</label>
+                <div id="grilla-horas" class="grid grid-cols-3 gap-2">
+                    <p class="col-span-3 text-gray-500 text-sm">Seleccioná una fecha primero.</p>
+                </div>
             </div>
         </div>
-        <div class="mt-4 text-center">
-            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Reservar turno</button>
+    </div>
+
+    <div id="step-4" class="step-content hidden">
+        <h3 class="text-xl font-semibold mb-4">Confirmar Reserva</h3>
+        <div class="bg-gray-50 p-4 rounded border border-gray-200 mb-6">
+            <p><strong>Servicio:</strong> <span id="resumen-servicio">-</span></p>
+            <p><strong>Profesional:</strong> <span id="resumen-peluquero">-</span></p>
+            <p><strong>Fecha:</strong> <span id="resumen-fecha">-</span></p>
+            <p><strong>Hora:</strong> <span id="resumen-hora">-</span></p>
+            <p class="mt-2 text-xl font-bold text-blue-600">Total: $<span id="resumen-precio">0</span></p>
         </div>
-    </form>
+        
+        <div class="flex gap-4">
+            <button onclick="volverPaso(3)" class="px-4 py-2 border rounded hover:bg-gray-100">Atrás</button>
+            <button id="btn-confirmar-final" class="flex-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-bold">
+                ✅ Confirmar Reserva
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- LISTA DE TURNOS -->

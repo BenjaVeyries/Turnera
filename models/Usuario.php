@@ -68,5 +68,22 @@ class Usuario {
         $stmt = $pdo->prepare("UPDATE usuarios SET intentos_fallidos = 0, bloqueado_hasta = NULL WHERE email = ?");
         $stmt->execute([$email]);
     }
+
+   
+    
+    public static function crearPeluquero($nombre, $email, $hash, $telefono='', $bio='', $foto=null) {
+        global $pdo;
+        
+        if(self::buscarPorEmail($email)) return false;
+
+        $sql = "INSERT INTO usuarios (nombre, email, password_hash, rol, telefono, biografia, foto) VALUES (?, ?, ?, 'Peluquero', ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        
+        if ($stmt->execute([$nombre, $email, $hash, $telefono, $bio, $foto])) {
+            // [CAMBIO CLAVE] Devolver el ID, no solo true
+            return $pdo->lastInsertId(); 
+        }
+        return false;
+    }
 }
 ?>

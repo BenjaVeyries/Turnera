@@ -43,7 +43,10 @@ if ($usuario && password_verify($password, $usuario['password_hash'])) {
 
     if ($usuario['rol'] === 'Administrador') {
         header("Location: AdminDashboard.php");
-    } else {
+    } elseif ($usuario['rol'] === 'Peluquero') {
+        header("Location: PeluqueroDashboard.php");
+    } 
+    else {
         header("Location: ClienteController.php");
     }
     exit;
