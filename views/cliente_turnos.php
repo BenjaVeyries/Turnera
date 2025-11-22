@@ -16,6 +16,34 @@
 
 <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-xl font-bold">Turnera Barbería</h1>
+    
+    <div class="relative group mr-4">
+    <button class="text-gray-300 hover:text-white focus:outline-none">
+        🔔
+        <?php if(count($notificaciones) > 0): ?>
+            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                <?php echo count($notificaciones); ?>
+            </span>
+        <?php endif; ?>
+    </button>
+
+    <div class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
+        <div class="py-2">
+            <?php if(count($notificaciones) > 0): ?>
+                <?php foreach($notificaciones as $noti): ?>
+                    <div class="px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
+                        <p class="text-sm text-gray-600"><?php echo htmlspecialchars($noti['mensaje']); ?></p>
+                        <p class="text-xs text-gray-400 mt-1"><?php echo $noti['creado_en']; ?></p>
+                    </div>
+                <?php endforeach; ?>
+                <a href="../controllers/marcar_leido.php" class="block text-center text-sm text-blue-500 py-2 hover:bg-gray-100">Marcar como leídas</a>
+            <?php else: ?>
+                <p class="px-4 py-3 text-sm text-gray-500 text-center">No tienes notificaciones nuevas.</p>
+            <?php endif; ?>
+        </div>
+        </div>
+    </div>
+    
     <div class="flex items-center gap-4">
         <p class="font-semibold text-gray-600">Hola, <?php echo htmlspecialchars($nombre); ?></p>
         <a href="../controllers/auth_logout.php" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Cerrar sesión</a>

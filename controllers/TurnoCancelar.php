@@ -8,6 +8,7 @@ ini_set('session.use_only_cookies', 1); // Forzar uso de cookies
 session_start();
 header('Content-Type: application/json');
 require_once '../models/Turno.php';
+require_once '../models/Notificacion.php';
 
 if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
     echo json_encode(['status'=>'error', 'message'=>'Error de seguridad (Token inválido)']);
@@ -30,6 +31,9 @@ if (!$idTurno) {
 
 // 3. Llamar al Modelo
 if (Turno::cancelarPorCliente($idTurno, $_SESSION['usuario_id'])) {
+    $nombre = $_SESSION['nombre'];
+    Notificacion::notificarAdmins("El cliente $nombre canceló su turno (ID: $idTurno).");
+    
     echo json_encode(['status' => 'ok']);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'No se pudo cancelar (o ya estaba cancelado)']);

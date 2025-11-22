@@ -1,7 +1,9 @@
 <?php
 require_once '../auth/require_login.php';
 require_once '../models/Turno.php'; // Importamos el Modelo
+require_once '../models/Notificacion.php';
 
+$notificaciones = Notificacion::obtenerNoLeidas($_SESSION['usuario_id']);
 
 if ($_SESSION['rol'] !== 'Administrador') {
     // Si es cliente y quiere entrar acá, lo mandamos a su panel
