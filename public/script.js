@@ -39,7 +39,7 @@ if (!usuario) {
 // Logout front-end (complementario al PHP)
 function logout() {
     sessionStorage.removeItem('usuario_id');
-    window.location.href = "logout.php";
+    window.location.href = "../controllers/auth_logout.php";
 }
 
 

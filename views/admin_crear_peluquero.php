@@ -29,6 +29,7 @@ $listaServicios = Servicio::obtenerTodos();
         </div>
         
         <form action="../controllers/AdminPeluqueroController.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>

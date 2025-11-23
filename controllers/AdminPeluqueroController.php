@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
         
-        // [NUEVO] Validación de Seguridad MIME TYPE (Lo que preguntabas)
+        //  Validación de Seguridad MIME TYPE (Lo que preguntabas)
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($finfo, $_FILES['foto']['tmp_name']);
         finfo_close($finfo); // Cerramos el recurso
