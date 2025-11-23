@@ -3,11 +3,7 @@
 
 // 1. CONFIGURACIÓN DE SEGURIDAD (SIEMPRE PRIMERO)
 // Solo configuramos si la sesión NO ha iniciado todavía
-if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.cookie_httponly', 1);
-    ini_set('session.use_only_cookies', 1);
-    session_start();
-}
+require_once '../config/session_start.php';
 
 header('Content-Type: application/json');
 

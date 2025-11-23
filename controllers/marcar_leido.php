@@ -1,6 +1,6 @@
 <?php
 // controllers/marcar_leido.php
-session_start();
+require_once '../config/session_start.php';
 require_once '../auth/require_login.php'; // Tu seguridad
 require_once '../models/Notificacion.php';
 

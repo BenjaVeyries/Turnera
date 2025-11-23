@@ -1,6 +1,11 @@
 <?php
-session_start();
+
+require_once '../config/session_start.php';
 require_once '../models/Servicio.php';
+
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+    die("Error de seguridad: Token inválido");
+}
 
 // Seguridad Admin
 if ($_SESSION['rol'] !== 'Administrador') die("Acceso denegado");

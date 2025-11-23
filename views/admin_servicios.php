@@ -10,6 +10,7 @@
     
     <form action="../controllers/AdminServicioController.php" method="POST" class="bg-white p-6 rounded shadow mb-8 max-w-lg">
         <input type="hidden" name="accion" value="crear_servicio">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         
         <label class="block mb-2">Nombre del Servicio</label>
         <input type="text" name="nombre" required class="w-full border p-2 rounded mb-4" placeholder="Ej: Corte Fade">

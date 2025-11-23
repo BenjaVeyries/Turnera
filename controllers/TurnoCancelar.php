@@ -1,11 +1,7 @@
 <?php
 // controllers/TurnoCancelar.php
 
-// Configuración de seguridad de Cookies 
-ini_set('session.cookie_httponly', 1); // JS no puede leer la cookie
-ini_set('session.use_only_cookies', 1); // Forzar uso de cookies
-
-session_start();
+require_once '../config/session_start.php';
 header('Content-Type: application/json');
 require_once '../models/Turno.php';
 require_once '../models/Notificacion.php';

@@ -2,10 +2,7 @@
 // controllers/auth_login.php
 
 // Configuración de Cookies
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-
-session_start();
+require_once '../config/session_start.php';
 require_once '../models/Usuario.php';
 
 $email = $_POST['email'] ?? '';

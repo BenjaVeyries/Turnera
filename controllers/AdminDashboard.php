@@ -1,8 +1,9 @@
 <?php
 // controllers/AdminDashboard.php
+require_once '../config/session_start.php';
 require_once '../auth/require_login.php';
 require_once '../models/Turno.php';
-require_once '../models/Notificacion.php'; // <--- [IMPORTANTE] Faltaba esto
+require_once '../models/Notificacion.php'; 
 
 // Seguridad: Solo Admin
 if ($_SESSION['rol'] !== 'Administrador') {
@@ -13,7 +14,7 @@ if ($_SESSION['rol'] !== 'Administrador') {
 // 1. Cargar Turnos
 $turnos = Turno::obtenerTodos();
 
-// 2. Cargar Notificaciones (Esto es lo que te faltaba)
+// 2. Cargar Notificaciones 
 $notificaciones = Notificacion::obtenerNoLeidas($_SESSION['usuario_id']);
 
 // 3. Cargar Vista
