@@ -10,13 +10,13 @@ class Usuario {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function crear($nombre, $email, $hash) {
+    public static function crear($nombre, $email, $hash, $telefono = null) {
         global $pdo;
-        // Verificar si existe
         if(self::buscarPorEmail($email)) return false;
 
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES (?, ?, ?, 'Cliente')");
-        $stmt->execute([$nombre, $email, $hash]);
+        // Agregamos la columna telefono al INSERT
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, password_hash, rol, telefono) VALUES (?, ?, ?, 'Cliente', ?)");
+        $stmt->execute([$nombre, $email, $hash, $telefono]);
         return $pdo->lastInsertId();
     }
 

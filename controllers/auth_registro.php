@@ -10,6 +10,7 @@ require_once '../models/Usuario.php'; // Usar Modelo
 $nombre = $_POST['nombre'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+$telefono = $_POST['telefono'] ?? null;
 
 if (empty($nombre) || empty($email) || empty($password)) {
     die("Faltan datos.");
@@ -20,7 +21,7 @@ $hash = password_hash($password, PASSWORD_DEFAULT);
 
 // Usar el Modelo para crear
 // (Asegurate que tu modelo Usuario::crear verifique si existe el email primero)
-$usuario_id = Usuario::crear($nombre, $email, $hash);
+$usuario_id = Usuario::crear($nombre, $email, $hash, $telefono);
 
 if ($usuario_id) {
     $_SESSION['usuario_id'] = $usuario_id;

@@ -64,7 +64,7 @@
                     <h2 class="font-bold text-lg text-gray-200">📅 Mis Turnos Asignados</h2>
                 </div>
                 
-                <div class="overflow-y-auto flex-1 p-2 scroll-personalizado">
+                    <div class="overflow-y-auto flex-1 p-2 scroll-personalizado" style="max-height: calc(100vh - 200px);">
                     <?php if(isset($turnos) && count($turnos) > 0): ?>
                         <div class="space-y-3">
                             <?php foreach ($turnos as $t): ?>
@@ -134,13 +134,14 @@
             calendar.render();
         });
 
-        async function cambiarEstado(idTurno, nuevoEstado) {
-            // ... Misma función JS que en admin_dashboard ...
+       async function cambiarEstado(idTurno, nuevoEstado) {
             const result = await Swal.fire({
                 title: '¿Actualizar turno?',
                 text: `Marcar como: ${nuevoEstado}`,
                 icon: 'question',
                 showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí'
             });
 
@@ -151,17 +152,46 @@
                     formData.append('estado', nuevoEstado);
                     formData.append('csrf_token', CSRF_TOKEN);
 
-                    // IMPORTANTE: AdminController debe permitir rol 'Peluquero'
-                    const res = await fetch('AdminController.php', { 
+                    // Recuerda: AdminController ahora atiende también a Peluqueros
+                    const res = await fetch('../controllers/AdminController.php', { 
                         method: 'POST', body: formData 
                     });
                     const data = await res.json();
 
-                    if(data.status === 'ok') { location.reload(); } 
-                    else { Swal.fire('Error', 'No se pudo actualizar', 'error'); }
-                } catch (error) { console.error(error); }
+                    // --- BLOQUE WHATSAPP INICIO ---
+                    if(data.status === 'ok') {
+                        
+                        if (data.wa_link) {
+                            const confirmarWa = await Swal.fire({
+                                title: '¡Actualizado!',
+                                text: '¿Querés avisarle al cliente por WhatsApp?',
+                                icon: 'success',
+                                showCancelButton: true,
+                                confirmButtonColor: '#25D366', 
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Sí, enviar WhatsApp',
+                                cancelButtonText: 'No, solo guardar'
+                            });
+
+                            if (confirmarWa.isConfirmed) {
+                                window.open(data.wa_link, '_blank');
+                            }
+                        } else {
+                            await Swal.fire('Actualizado', 'El estado ha cambiado correctamente.', 'success');
+                        }
+
+                        location.reload();
+                    } 
+                    // --- BLOQUE WHATSAPP FIN ---
+                    else { 
+                        Swal.fire('Error', 'No se pudo actualizar', 'error'); 
+                    }
+                } catch (error) { 
+                    console.error(error); 
+                    Swal.fire('Error', 'Fallo de conexión', 'error');
+                }
             }
         }
-    </script>
+</script>
 </body>
 </html>

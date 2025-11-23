@@ -186,14 +186,40 @@
                     });
                     const data = await res.json();
 
+                    // --- BLOQUE WHATSAPP INICIO ---
                     if(data.status === 'ok') {
-                        // Recargamos la página para ver los cambios en Lista y Calendario a la vez
+                        
+                        // Verificamos si el backend nos mandó el link
+                        if (data.wa_link) {
+                            const confirmarWa = await Swal.fire({
+                                title: '¡Actualizado!',
+                                text: '¿Querés avisarle al cliente por WhatsApp?',
+                                icon: 'success',
+                                showCancelButton: true,
+                                confirmButtonColor: '#25D366', // Verde WhatsApp
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Sí, enviar WhatsApp',
+                                cancelButtonText: 'No, solo guardar'
+                            });
+
+                            if (confirmarWa.isConfirmed) {
+                                // Abrimos WhatsApp en pestaña nueva
+                                window.open(data.wa_link, '_blank');
+                            }
+                        } else {
+                            // Si no tiene teléfono, mensaje normal
+                            await Swal.fire('Actualizado', 'El estado ha cambiado correctamente.', 'success');
+                        }
+
                         location.reload();
-                    } else {
+                    } 
+                    // --- BLOQUE WHATSAPP FIN ---
+                    else {
                         Swal.fire('Error', 'No se pudo actualizar', 'error');
                     }
                 } catch (error) {
                     console.error(error);
+                    Swal.fire('Error', 'Fallo de conexión', 'error');
                 }
             }
         }

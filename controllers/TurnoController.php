@@ -42,11 +42,17 @@ try {
     // 5. Crear Turno
     $creado = Turno::crear($usuario_id, $fecha, $hora, $servicio_id, $peluquero_id);
 
-    if($creado){
-        // Notificar admin
+   if($creado){
         $nombreCliente = $_SESSION['nombre'] ?? 'Cliente';
         $mensaje = "Nuevo turno: $nombreCliente reservó el $fecha a las " . substr($hora, 0, 5);
+        
+        // 1. Avisar Admin
         Notificacion::notificarAdmins($mensaje);
+
+        // 2. Avisar Peluquero (NUEVO)
+        if ($peluquero_id) {
+            Notificacion::crear($peluquero_id, $mensaje);
+        }
         
         echo json_encode(['status'=>'ok']);
     } else {

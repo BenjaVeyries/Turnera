@@ -72,8 +72,8 @@ class Turno {
                 FROM turnos t 
                 JOIN usuarios u ON t.usuario_id = u.id 
                 LEFT JOIN servicios s ON t.servicio_id = s.id
-                WHERE t.peluquero_id = ? 
-                ORDER BY t.fecha DESC, t.hora ASC";
+                WHERE t.peluquero_id = ? AND t.fecha >= CURDATE() -- Solo futuros 
+                ORDER BY t.fecha ASC, t.hora ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$peluquero_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
