@@ -1,5 +1,4 @@
 <?php
-
 require_once '../config/session_start.php';
 require_once '../models/Servicio.php';
 
@@ -14,8 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'crear_servici
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $duracion = $_POST['duracion'];
+    $descripcion = $_POST['descripcion'] ?? ''; 
     
-    if(Servicio::crear($nombre, $precio, $duracion)) {
+    // Pasamos la descripción al modelo
+    if(Servicio::crear($nombre, $precio, $duracion, $descripcion)) {
         header("Location: ../views/admin_servicios.php?status=ok");
     } else {
         echo "Error al guardar";
