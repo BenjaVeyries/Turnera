@@ -86,3 +86,10 @@ Acceder desde el navegador a la carpeta del proyecto.
 URL: http://localhost/Turnera/
 
 El sistema redirigirá automáticamente a la vista principal mediante index.php.
+
+### 🔑 Credenciales de Prueba (Demo)
+
+[Rol,Email,Contraseña]
+Admin,admin@barberia.com,123456789
+Peluquero,juan@barberia.com,123456789
+Cliente,carlos@gmail.com,123456789
