@@ -87,9 +87,39 @@ URL: http://localhost/Turnera/
 
 El sistema redirigirá automáticamente a la vista principal mediante index.php.
 
-### 🔑 Credenciales de Prueba (Demo)
+## 🔑 Credenciales de Prueba (Demo)
 
-[Rol,Email,Contraseña]
-Admin,admin@barberia.com,123456789
-Peluquero,juan@barberia.com,123456789
-Cliente,carlos@gmail.com,123456789
+Todas las cuentas han sido configuradas con la misma contraseña para facilitar las pruebas.
+
+| Rol | Usuario (Nombre) | Email | Contraseña |
+| :--- | :--- | :--- | :--- |
+| **👑 Administrador** | **Administrador** | `admin@barberia.com` | `123456789` |
+| | | | |
+| **✂️ Peluqueros** | Juan Perez | `juan@barberia.com` | `123456789` |
+| | Pedro Gomez | `pedro@barberia.com` | `123456789` |
+| | Martin Ruiz | `martin@barberia.com` | `123456789` |
+| | Ana Lopez | `ana@barberia.com` | `123456789` |
+| | Laura Diaz | `laura@barberia.com` | `123456789` |
+| | Clara Vega | `clara@barberia.com` | `123456789` |
+| | Juan Carlos | `jc@gmail.com` | `123456789` |
+| | | | |
+| **👤 Clientes** | Carlos Cliente | `carlos@gmail.com` | `123456789` |
+| | Sofia Nueva | `sofia@gmail.com` | `123456789` |
+| | Lucas Rodriguez | `lucas@gmail.com` | `123456789` |
+| | Valentina Fernandez | `valen@gmail.com` | `123456789` |
+| | Mateo Gonzalez | `mateo@gmail.com` | `123456789` |
+| | Camila Lopez | `cami@gmail.com` | `123456789` |
+| | Nicolas Martinez | `nico@gmail.com` | `123456789` |
+| | Julieta Torres | `juli@gmail.com` | `123456789` |
+| | Tomas Diaz | `tomi@gmail.com` | `123456789` |
+| | Florencia Ruiz | `flor@gmail.com` | `123456789` |
+| | Agustin Silva | `agus@gmail.com` | `123456789` |
+| | Martina Perez | `marti@gmail.com` | `123456789` |
+| | Facundo Castro | `facu@gmail.com` | `123456789` |
+| | Rocio Gomez | `rocio@gmail.com` | `123456789` |
+| | Joaquin Sosa | `joaco@gmail.com` | `123456789` |
+| | Micaela Benitez | `mica@gmail.com` | `123456789` |
+| | Santiago Romero | `santi@gmail.com` | `123456789` |
+| | Lucia Herrera | `lu@gmail.com` | `123456789` |
+| | Bruno Flores | `bruno@gmail.com` | `123456789` |
+| | Delfina Acuña | `delfi@gmail.com` | `123456789` |
