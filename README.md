@@ -60,7 +60,7 @@ Además de lo solicitado, hemos incorporado características avanzadas para mejo
 Siga estos pasos para levantar el entorno de desarrollo localmente:
 
 ### 1. Base de Datos
-Importar el archivo `barberia.sql` (ubicado en la carpeta `/base-de-datos`) en su gestor MySQL local (ej: phpMyAdmin).
+Importar el archivo `barberia.sql` (ubicado en la carpeta `/bd_para_importar`) en su gestor MySQL local (ej: phpMyAdmin).
 
 ### 2. Instalación de Dependencias
 Este proyecto utiliza **Composer** para gestionar librerías de terceros. Abra una terminal en la raíz del proyecto y ejecute:
