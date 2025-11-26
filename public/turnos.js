@@ -21,6 +21,9 @@ let reserva = {
     hora: null
 };
 
+// Variable para la instancia del calendario
+let calendarioInstance = null;
+
 // 1. INICIAR WIZARD
 const btnComenzar = document.getElementById('btn-reserva');
 const wizardContainer = document.getElementById('wizard-reserva');
@@ -123,43 +126,78 @@ async function cargarPeluqueros(servicioId) {
 function seleccionarPeluquero(p) {
     reserva.peluquero_id = p.id;
     reserva.peluquero_nombre = p.nombre;
+    
     // Resetear fecha al cambiar de peluquero
     document.getElementById('wizard-fecha').value = '';
-    document.getElementById('grilla-horas').innerHTML = '<p class="col-span-3 text-gray-500 text-sm">Seleccioná una fecha.</p>';
+    
+    // MODIFICACIÓN: Limpiamos la selección visual del calendario si existe
+    if(calendarioInstance) {
+        calendarioInstance.clear();
+    }
+    
+    document.getElementById('grilla-horas').innerHTML = '<p class="col-span-3 text-gray-500 text-sm">Seleccioná una fecha en el calendario.</p>';
     mostrarPaso(3);
 }
 
-// --- PASO 3: HORARIOS ---
-const inputFecha = document.getElementById('wizard-fecha');
-if(inputFecha) {
-    inputFecha.addEventListener('change', async () => {
-        const fecha = inputFecha.value;
-        if(!fecha) return;
-        
-        reserva.fecha = fecha;
-        const contenedor = document.getElementById('grilla-horas');
-        contenedor.innerHTML = '<p>Cargando disponibilidad...</p>';
+// --- PASO 3: HORARIOS (MODIFICADO CON FLATPICKR) ---
 
-        try {
-            const res = await fetch(`../controllers/HorarioController.php?fecha=${fecha}&peluquero_id=${reserva.peluquero_id}`);
-            const horas = await res.json();
-
-            contenedor.innerHTML = '';
-            if(horas.length === 0) {
-                contenedor.innerHTML = '<p class="col-span-3 text-red-500 text-sm">No hay turnos libres este día.</p>';
-            } else {
-                horas.forEach(h => {
-                    const btn = document.createElement('button');
-                    // Formatear hora para quitar segundos (08:00:00 -> 08:00)
-                    const horaCorta = h.substring(0, 5); 
-                    btn.textContent = horaCorta;
-                    btn.className = "bg-blue-50 border border-blue-200 text-blue-700 py-2 rounded hover:bg-blue-600 hover:text-white transition";
-                    btn.onclick = () => seleccionarHora(h);
-                    contenedor.appendChild(btn);
-                });
+// Inicializamos el calendario cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    const mountPoint = document.getElementById('calendar-mount');
+    
+    // Solo inicializamos si existe el elemento (para evitar errores en otras páginas)
+    if (mountPoint) {
+        calendarioInstance = flatpickr(mountPoint, {
+            inline: true,          // Calendario siempre visible (no popup)
+            locale: "es",          // Idioma español
+            minDate: "today",      // Bloquear fechas pasadas
+            dateFormat: "Y-m-d",   // Formato compatible con PHP/MySQL
+            disableMobile: true,   // Forzar vista de escritorio en móviles para mejor UX
+            onChange: function(selectedDates, dateStr, instance) {
+                // Cuando el usuario toca un día, llamamos a la función de carga
+                onFechaSeleccionada(dateStr);
             }
-        } catch(e) { contenedor.innerHTML = 'Error al cargar horarios'; }
-    });
+        });
+    }
+});
+
+// Nueva función para manejar la selección desde el calendario
+async function onFechaSeleccionada(fecha) {
+    if(!fecha) return;
+    
+    // Guardamos fecha en el objeto global y en el input hidden
+    reserva.fecha = fecha;
+    document.getElementById('wizard-fecha').value = fecha;
+
+    const contenedor = document.getElementById('grilla-horas');
+    contenedor.innerHTML = '<p class="col-span-full text-center text-amber-500 animate-pulse text-sm">Buscando disponibilidad...</p>';
+
+    try {
+        const res = await fetch(`../controllers/HorarioController.php?fecha=${fecha}&peluquero_id=${reserva.peluquero_id}`);
+        const horas = await res.json();
+
+        contenedor.innerHTML = '';
+        if(horas.length === 0) {
+            contenedor.innerHTML = `
+                <div class="col-span-full text-center py-4 bg-neutral-950/50 rounded-lg border border-red-900/30">
+                    <p class="text-red-400 font-bold text-sm">Sin turnos disponibles</p>
+                    <p class="text-neutral-500 text-xs mt-1">Prueba otra fecha.</p>
+                </div>`;
+        } else {
+            horas.forEach(h => {
+                const btn = document.createElement('button');
+                const horaCorta = h.substring(0, 5); 
+                btn.textContent = horaCorta;
+                // Estilos adaptados al modo oscuro
+                btn.className = "bg-neutral-800 border border-neutral-700 text-neutral-300 py-2 rounded hover:bg-amber-600 hover:text-white hover:border-amber-500 transition font-medium text-sm";
+                btn.onclick = () => seleccionarHora(h);
+                contenedor.appendChild(btn);
+            });
+        }
+    } catch(e) { 
+        console.error(e);
+        contenedor.innerHTML = '<p class="text-red-500 col-span-full text-center text-sm">Error al cargar horarios.</p>'; 
+    }
 }
 
 function seleccionarHora(h) {
@@ -184,10 +222,10 @@ if(btnFinal) {
         const formData = new FormData();
         formData.append('fecha', reserva.fecha);
         formData.append('hora', reserva.hora);
-        formData.append('servicio_id', reserva.servicio_id); // <-- Nuevo campo
-        formData.append('peluquero_id', reserva.peluquero_id); // <-- Nuevo campo
+        formData.append('servicio_id', reserva.servicio_id);
+        formData.append('peluquero_id', reserva.peluquero_id);
         
-        // IMPORTANTE: Agregar CSRF Token (Variable global definida en la vista PHP)
+        // IMPORTANTE: Agregar CSRF Token
         if(typeof CSRF_TOKEN !== 'undefined') {
             formData.append('csrf_token', CSRF_TOKEN);
         }

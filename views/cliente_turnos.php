@@ -11,7 +11,10 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
@@ -160,16 +163,17 @@
                         <button onclick="volverPaso(2)" class="text-sm text-amber-500 hover:text-amber-400 transition">← Volver</button>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="md:col-span-1">
-                            <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase tracking-wider">Fecha</label>
-                            <input type="date" id="wizard-fecha" class="w-full bg-neutral-950 border border-neutral-800 p-3 rounded-xl focus:ring-1 focus:ring-amber-500 outline-none text-white color-scheme-dark" min="<?php echo date('Y-m-d'); ?>">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="md:col-span-1 flex justify-center md:justify-start">
+                            <input type="hidden" id="wizard-fecha">
+                            <div id="calendar-mount" class="shadow-2xl rounded-xl overflow-hidden border border-neutral-800"></div>
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-neutral-500 mb-2 uppercase tracking-wider">Horarios Disponibles</label>
-                            <div id="grilla-horas" class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                        
+                        <div class="md:col-span-1 lg:col-span-2">
+                            <label class="block text-xs font-bold text-neutral-500 mb-4 uppercase tracking-wider">Horarios Disponibles</label>
+                            <div id="grilla-horas" class="grid grid-cols-3 sm:grid-cols-4 gap-3 max-h-[320px] overflow-y-auto custom-scroll pr-2">
                                 <p class="col-span-full text-neutral-600 text-sm italic bg-neutral-950 p-4 rounded-lg text-center border border-dashed border-neutral-800">
-                                    👈 Selecciona una fecha primero.
+                                    👈 Seleccioná un día en el calendario.
                                 </p>
                             </div>
                         </div>
