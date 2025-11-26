@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-11-2025 a las 22:01:18
+-- Tiempo de generación: 26-11-2025 a las 03:35:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -22,6 +22,27 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `barberia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `barberia`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `configuracion`
+--
+
+CREATE TABLE `configuracion` (
+  `id` int(11) NOT NULL,
+  `clave` varchar(50) NOT NULL,
+  `valor` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `configuracion`
+--
+
+INSERT INTO `configuracion` (`id`, `clave`, `valor`) VALUES
+(7, 'mapa_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.016887889453!2d-58.38375908477038!3d-34.603738880459435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4aa9f0a6da5edb%3A0x11bead4e234e558b!2sObelisco!5e0!3m2!1ses-419!2sar!4v1636573159331!5m2!1ses-419!2sar'),
+(8, 'direccion', 'Av. Corrientes 1066, CABA'),
+(9, 'telefono', '11 2345 6789');
 
 -- --------------------------------------------------------
 
@@ -210,7 +231,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `rol`, `email`, `password_hash`, `fecha_
 (5, 'Ana Lopez', 'Peluquero', 'ana@barberia.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, 'PeluqueraGenerica1.jpg', '5491144444444', 'Estilista colorista. Cambios de look.'),
 (6, 'Laura Diaz', 'Peluquero', 'laura@barberia.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, 'PeluqueraGenerica2.jpg', '5491155555555', 'Cortes modernos y peinados.'),
 (7, 'Clara Vega', 'Peluquero', 'clara@barberia.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, 'PeluqueraGenerica3.jpg', '5491166666666', 'Especialista en alisados.'),
-(8, 'Juan Carlos', 'Peluquero', 'jc@gmail.com', '$2y$10$/2pBrcyEqNL41Z2piv4skOPHg5jNnkgmcjDmduaJ7AACWpKd4Fo.a', '2025-11-25 20:51:41', 0, NULL, 'pro_6923adf4a6780.jpg', '02923511691', 'Especialista en barba'),
+(8, 'Juan Carlos', 'Peluquero', 'jc@gmail.com', '$2y$10$/2pBrcyEqNL41Z2piv4skOPHg5jNnkgmcjDmduaJ7AACWpKd4Fo.a', '2025-11-25 20:51:41', 0, NULL, 'PeluqueroGenerico4.png', '02923511691', 'Especialista en barba'),
 (9, 'Carlos Cliente', 'Cliente', 'carlos@gmail.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, NULL, '5491111111111', NULL),
 (10, 'Sofia Nueva', 'Cliente', 'sofia@gmail.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, NULL, '5491122222222', NULL),
 (11, 'Lucas Rodriguez', 'Cliente', 'lucas@gmail.com', '$2y$10$5AaXNna.CjLbTmlmNLXn0.ujq8MDhWKTd/ygNh3USBvOce6GApShe', '2025-11-25 20:51:41', 0, NULL, NULL, '5491133333333', NULL),
@@ -235,6 +256,13 @@ INSERT INTO `usuarios` (`id`, `nombre`, `rol`, `email`, `password_hash`, `fecha_
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `configuracion`
+--
+ALTER TABLE `configuracion`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `clave` (`clave`);
 
 --
 -- Indices de la tabla `disponibilidad_peluquero`
@@ -282,6 +310,12 @@ ALTER TABLE `usuarios`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `configuracion`
+--
+ALTER TABLE `configuracion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `disponibilidad_peluquero`
